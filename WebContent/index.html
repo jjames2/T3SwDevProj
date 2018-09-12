@@ -1,14 +1,72 @@
 <!DOCTYPE html>
-<html ng-app="demoApp">
+<html ng-app="mainApp">
 <head>
 <meta charset="ISO-8859-1">
-<title>Hello World!</title>
+<title>To-Do List</title>
 <script src="lib/angular.min.js"></script>
-<script src="js/demo.js"></script>
+<script src="js/main.js"></script>
+<style>
+</style>
 </head>
 <body>
-<div ng-controller="demoCtrl">
-        <p ng-bind="message"></p>
+<div ng-controller="mainCtrl">
+	<label for="newUserFirst"> First Name: </label>
+	<input type="text" name="newUserFirst" id="newUserFirst" ng-model="newUserFirst"></input>
+	<label for="newUserLast"> Last Name: </label>
+	<input type="text" name="newUserLast" id="newUserLast" ng-model="newUserLast"></input>
+    <button ng-click="addUser()">Add User</button><br>
+    <label for="repeatSelect"> Select User: </label>
+    <select name="repeatSelect" id="repeatSelect" ng-model="selectedUser">
+      <option ng-repeat="user in users" ng-value="{{user}}">{{user.first}} {{user.last}}</option>
+    </select>
+	<button ng-click="getTasks()">See Tasks</button>
+	<div>
+		<table>
+	         <tr>
+	         	<th></th>
+	            <th>Title</th>
+	            <th>Description</th>
+	            <th>Due Date</th>
+	            <th>State</th>
+	            <th>Category</th>
+	            <th>Priority</th>
+	         </tr>
+	         <tr ng-repeat = "task in tasks">
+	         	<td><button ng-click="editTask(task)">Edit Task</button><br></td>
+	            <td>{{ task.title }}</td>
+	            <td>{{ task.description }}</td>
+	            <td>{{ task.duedate }}</td>
+	            <td>{{ task.state }}</td>
+	            <td>{{ task.category }}</td>
+	            <td>{{ task.priority }}</td>
+	         </tr>
+	   </table>
+   </div>
+   <div>
+   		<button ng-click="addTask()" ng-disabled="editMode">Add Task</button>
+   		<button ng-click="cancelEdit()" ng-disabled="!editMode">Cancel Changes</button>
+   		<br>
+   		<label for="updateTaskTitle"> Task Title: </label>
+		<input type="text" name="updateTaskTitle" id="updateTaskTitle" ng-model="updateTaskTitle" ng-disabled="!editMode"></input>
+		<label for="updateTaskDescription"> Task Description: </label>
+		<textarea name="updateTaskDescription" id="updateTaskDescription" ng-model="updateTaskDescription" ng-disabled="!editMode"></textarea>
+		<br>
+		<label for="updateTaskDueDate"> Due Date: </label>
+		<input type="date" name="updateTaskDueDate" id="updateTaskDueDate" ng-model="updateTaskDueDate" ng-disabled="!editMode"></input>
+		<label for="updateTaskState"> State: </label>
+		<select name="updateTaskState" id="updateTaskState" ng-model="updateTaskState" ng-disabled="!editMode">
+      		<option ng-repeat="state in states" ng-value="state">{{state}}</option>
+    	</select>
+    	<br>
+		<label for="updateTaskCategory"> Category: </label>
+		<input type="text" name="updateTaskCategory" id="updateTaskCategory" ng-model="updateTaskCategory" ng-disabled="!editMode"></input>
+		<label for="updateTaskPriority"> Priority Level: </label>
+		<select name="updateTaskPriority" id="updateTaskPriority" ng-model="updateTaskPriority" ng-disabled="!editMode">
+      		<option ng-repeat="priority in priorities" ng-value="priority">{{priority}}</option>
+    	</select>
+    	<br>
+    	<button ng-click="saveTaskUpdates()" ng-disabled="!editMode">Save Changes</button>
+   </div>
 </div>
 </body>
 </html>
