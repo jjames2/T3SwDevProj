@@ -34,6 +34,9 @@
     					taskObj.duedate = taskInfo[3];
     					taskObj.state = getStateById(taskInfo[4]);
     					taskObj.category = taskInfo[5];
+    					if(taskInfo[6].toLowerCase() === "null"){
+    						taskInfo[6] = "";
+    					}
     					taskObj.priority = taskInfo[6];
     					taskData.push(taskObj);
     				});
@@ -43,8 +46,21 @@
     		}
     	}
     	
+    	$scope.deleteTask = function(id){
+    		var data = "DELETE/split," + id;
+    		$http.post("\GetTasks", data).then(function(response){
+    			$scope.getTasks();
+    		});
+    	}
+    	
     	$scope.addTask = function(){
-    		$scope.editMode = true; 
+    		$scope.editMode = true;
+    		$scope.updateTaskTitle = "";
+        	$scope.updateTaskDescription = "";
+        	$scope.updateTaskDueDate = "";
+        	$scope.updateTaskState = "";
+        	$scope.updateTaskCategory = "";
+        	$scope.updateTaskPriority = "";
     	}
     	
     	$scope.editTask = function(task){
@@ -67,8 +83,11 @@
     		if($scope.editTaskId === null){
     			$scope.editTaskId = "0";
     		}
-    		if($scope.updateTaskDueDate != null && $scope.updateTaskDueDate != ""){
+    		if($scope.updateTaskDueDate != null && $scope.updateTaskDueDate != "" && $scope.updateTaskDueDate.toString().toLowerCase() != "invalid date"){
     			$scope.updateTaskDueDate = ($scope.updateTaskDueDate.getMonth() + 1) + "/" + $scope.updateTaskDueDate.getDate() + "/" +  $scope.updateTaskDueDate.getFullYear();
+    		}
+    		else if($scope.updateTaskDueDate != null && $scope.updateTaskDueDate.toString().toLowerCase() === "invalid date"){
+    			$scope.updateTaskDueDate = "";
     		}
     		if($scope.updateTaskState!=null && $scope.updateTaskState!="" ){
     			$scope.updateTaskState = getIdByState($scope.updateTaskState)
@@ -122,8 +141,11 @@
     		else if(trimmedId === "2"){
     			return "Doing";
     		}
-    		else{
+    		else if(trimmedId === "3"){
     			return "Done";
+    		}
+    		else{
+    			return "";
     		}
     	}
     	
@@ -134,8 +156,11 @@
     		else if(state === "Doing"){
     			return "2";
     		}
-    		else{
+    		else if(state === "Done"){
     			return "3";
+    		}
+    		else{
+    			return "";
     		}
     	}
     });

@@ -53,7 +53,7 @@ public class GetTasks extends HttpServlet {
 		
 		try {
 			String selectSQL = "SELECT * FROM Tasks WHERE user_id=" + request.getParameter("userId")
-			+ " ORDER BY task_priorityid DESC";
+			+ " ORDER BY task_priorityid";
 			System.out.println(selectSQL);
 	        PreparedStatement preparedStatement = connection.prepareStatement(selectSQL);
 	        ResultSet rs = preparedStatement.executeQuery();
@@ -102,10 +102,27 @@ public class GetTasks extends HttpServlet {
 		
 		try {
 			BufferedReader br = request.getReader();
-			String[] postData = br.readLine().split("/split,");
-			String insertSQL;
-			if(postData[0].equals("0")) {
-				insertSQL = "INSERT INTO Tasks(user_id, "
+			StringBuilder linesCombined = new StringBuilder();
+			String line;
+			while((line = br.readLine()) != null) {
+				linesCombined.append(line + "\\n");
+			}
+			linesCombined.setLength(linesCombined.length() - 2);
+			String[] postData = linesCombined.toString().split("/split,", -1);
+			String updateSQL;
+			System.out.println(linesCombined.toString());
+			System.out.println(postData.length);
+			if(postData.length == 8 && postData[5].equals("")) {
+				postData[5] = "NULL";
+			}
+			if(postData.length == 8 && postData[7].equals("")) {
+				postData[7] = "NULL";
+			}
+			if(postData[0].equals("DELETE")){
+				updateSQL = "DELETE FROM Tasks WHERE id = " + postData[1];
+			}
+			else if(postData[0].equals("0")) {
+				updateSQL = "INSERT INTO Tasks(user_id, "
 						+ "task_title, " +
 					    "task_description," + 
 						"task_duedate," + 
@@ -121,7 +138,7 @@ public class GetTasks extends HttpServlet {
 						postData[7] + ")";
 			}
 			else {
-				insertSQL = "UPDATE Tasks SET "
+				updateSQL = "UPDATE Tasks SET "
 						+ "task_title = \"" + postData[2] +
 					    "\",task_description = \"" + postData[3] + 
 						"\",task_duedate = \"" + postData[4] + 
@@ -131,14 +148,14 @@ public class GetTasks extends HttpServlet {
 						" WHERE id=" + postData[0];
 			}
 
-			System.out.println(insertSQL);
-	        PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
+			System.out.println(updateSQL);
+	        PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
 	        int rs = preparedStatement.executeUpdate();
 	        if(rs == 0) {
-	        	response.getWriter().append("INSERT FAILED");
+	        	response.getWriter().append("UPDATE FAILED");
 	        }
 	        else {
-	        	response.getWriter().append("INSERT SUCCEDED");
+	        	response.getWriter().append("UPDATE SUCCEDED");
 	        }
 		}
 		catch(SQLException e) {

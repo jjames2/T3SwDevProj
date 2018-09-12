@@ -15,6 +15,7 @@
 	<label for="newUserLast"> Last Name: </label>
 	<input type="text" name="newUserLast" id="newUserLast" ng-model="newUserLast"></input>
     <button ng-click="addUser()">Add User</button><br>
+    <br>
     <label for="repeatSelect"> Select User: </label>
     <select name="repeatSelect" id="repeatSelect" ng-model="selectedUser">
       <option ng-repeat="user in users" ng-value="{{user}}">{{user.first}} {{user.last}}</option>
@@ -32,16 +33,18 @@
 	            <th>Priority</th>
 	         </tr>
 	         <tr ng-repeat = "task in tasks">
-	         	<td><button ng-click="editTask(task)">Edit Task</button><br></td>
+	         	<td><button ng-click="editTask(task)">Edit Task</button></td>
 	            <td>{{ task.title }}</td>
 	            <td>{{ task.description }}</td>
 	            <td>{{ task.duedate }}</td>
 	            <td>{{ task.state }}</td>
 	            <td>{{ task.category }}</td>
 	            <td>{{ task.priority }}</td>
+	            <td><button ng-click="deleteTask(task.id)">Delete Task</button></td>
 	         </tr>
 	   </table>
    </div>
+   <br>
    <div>
    		<button ng-click="addTask()" ng-disabled="editMode">Add Task</button>
    		<button ng-click="cancelEdit()" ng-disabled="!editMode">Cancel Changes</button>
