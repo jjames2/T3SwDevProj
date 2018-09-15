@@ -6,22 +6,40 @@
 <script src="lib/angular.min.js"></script>
 <script src="js/main.js"></script>
 <style>
+body{
+	text-align: center;
+}
+table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+th, td {
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;} 
 </style>
 </head>
 <body>
 <div ng-controller="mainCtrl">
-	<label for="newUserFirst"> First Name: </label>
-	<input type="text" name="newUserFirst" id="newUserFirst" ng-model="newUserFirst"></input>
-	<label for="newUserLast"> Last Name: </label>
-	<input type="text" name="newUserLast" id="newUserLast" ng-model="newUserLast"></input>
-    <button ng-click="addUser()">Add User</button><br>
-    <br>
+	<div style="border: thin solid black">
+		<br>
+		<label for="newUserFirst"> First Name: </label>
+		<input type="text" name="newUserFirst" id="newUserFirst" ng-model="newUserFirst"></input>
+		<label for="newUserLast"> Last Name: </label>
+		<input type="text" name="newUserLast" id="newUserLast" ng-model="newUserLast"></input>
+	    <button ng-click="addUser()">Add User</button>
+	    <br><br>
+	</div>
+	<br>
     <label for="repeatSelect"> Select User: </label>
     <select name="repeatSelect" id="repeatSelect" ng-model="selectedUser">
       <option ng-repeat="user in users" ng-value="{{user}}">{{user.first}} {{user.last}}</option>
     </select>
 	<button ng-click="getTasks()">See Tasks</button>
-	<div>
+	<div style="overflow-y: auto; height:400px;">
 		<table>
 	         <tr>
 	         	<th></th>
@@ -42,10 +60,11 @@
 	            <td>{{ task.priority }}</td>
 	            <td><button ng-click="deleteTask(task.id)">Delete Task</button></td>
 	         </tr>
-	   </table>
+   		</table>
    </div>
    <br>
-   <div>
+   <div style="border: thin solid black">
+   		<br>
    		<button ng-click="addTask()" ng-disabled="editMode">Add Task</button>
    		<button ng-click="cancelEdit()" ng-disabled="!editMode">Cancel Changes</button>
    		<br>
@@ -69,6 +88,7 @@
     	</select>
     	<br>
     	<button ng-click="saveTaskUpdates()" ng-disabled="!editMode">Save Changes</button>
+    	<br><br>
    </div>
 </div>
 </body>

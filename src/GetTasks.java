@@ -33,6 +33,7 @@ public class GetTasks extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * Return tasks for user
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -82,6 +83,7 @@ public class GetTasks extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * Based on data sent by client, deletes a task, updates an existing tasks, or creates a new task in the database.
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -110,8 +112,6 @@ public class GetTasks extends HttpServlet {
 			linesCombined.setLength(linesCombined.length() - 2);
 			String[] postData = linesCombined.toString().split("/split,", -1);
 			String updateSQL;
-			System.out.println(linesCombined.toString());
-			System.out.println(postData.length);
 			if(postData.length == 8 && postData[5].equals("")) {
 				postData[5] = "NULL";
 			}

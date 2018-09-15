@@ -17,8 +17,10 @@
     	$scope.states = ["To Do", "Doing", "Done"];
     	$scope.priorities = ["1","2","3","4","5"];
     	
+    	// populate user dropdown
     	updateUserDropDown();
     	
+    	// get tasks for user
     	$scope.getTasks = function(){
     		if($scope.selectedUser != null){
     			$http.get("\GetTasks?userId=" + $scope.selectedUser.id).then(function(response){
@@ -46,6 +48,7 @@
     		}
     	}
     	
+    	// remove task from database
     	$scope.deleteTask = function(id){
     		var data = "DELETE/split," + id;
     		$http.post("\GetTasks", data).then(function(response){
@@ -53,6 +56,7 @@
     		});
     	}
     	
+    	// Setup window for adding task
     	$scope.addTask = function(){
     		$scope.editMode = true;
     		$scope.updateTaskTitle = "";
@@ -63,6 +67,7 @@
         	$scope.updateTaskPriority = "";
     	}
     	
+    	// Set up window for editing existing task
     	$scope.editTask = function(task){
     		$scope.editMode = true;
     		$scope.editTaskId = task.id; 
@@ -74,11 +79,13 @@
         	$scope.updateTaskPriority = task.priority;
     	}
     	
+    	// Cancel edit/add
     	$scope.cancelEdit = function(){
     		$scope.editMode = false;
     		$scope.editTaskId = null;
     	}
     	
+    	// save changes/creation of task
     	$scope.saveTaskUpdates = function(){
     		if($scope.editTaskId === null){
     			$scope.editTaskId = "0";
@@ -106,6 +113,7 @@
     		});
     	}
     	
+    	// add user
     	$scope.addUser = function(){
     		var data = $scope.newUserLast + "/split," + $scope.newUserFirst;
     		$http.post("\GetUsers", data).then(function(response){
@@ -113,6 +121,7 @@
     		});
     	}
     	
+    	// populates select user dropdown
     	function updateUserDropDown(){
     		$http.get("\GetUsers").then(function(response){
     			var users = response.data.split("/split\n");
@@ -133,6 +142,7 @@
     		});
     	}
     	
+    	// get state based on id from database
     	function getStateById(id){
     		var trimmedId = id.trim();
     		if(trimmedId === "1"){
@@ -149,6 +159,7 @@
     		}
     	}
     	
+    	// Get id for database by state
     	function getIdByState(state){
     		if(state === "To Do"){
     			return "1";
